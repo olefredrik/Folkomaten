@@ -20,6 +20,7 @@ En macOS menylinje-app som enkelt lar deg kopiere fødselsnummeret til en BankID
 Krever Swift 5.9+ (Command Line Tools holder).
 
 ```sh
+git clone https://github.com/olefredrik/Folkomaten.git
 cd Folkomaten
 ./Scripts/build-app.sh    # lager Folkomaten.app
 open Folkomaten.app

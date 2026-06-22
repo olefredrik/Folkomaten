@@ -10,6 +10,9 @@ struct MenuContentView: View {
     @State private var search = ""
     @State private var onlyFavorites = false
     @State private var copiedFnr: String?
+    @State private var isFetchingFromTenor = false
+    @State private var tenorErrorMessage: String?
+    @State private var showingSettings = false
 
     private var results: [TestUser] {
         store.filtered(search: search, onlyFavorites: onlyFavorites)
@@ -26,6 +29,17 @@ struct MenuContentView: View {
             footer
         }
         .frame(width: 400, height: 480)
+        .sheet(isPresented: $showingSettings) {
+            MaskinportenSettingsView(isPresented: $showingSettings)
+        }
+        .alert("Tenor-feil", isPresented: Binding(
+            get: { tenorErrorMessage != nil },
+            set: { if !$0 { tenorErrorMessage = nil } }
+        )) {
+            Button("OK") { tenorErrorMessage = nil }
+        } message: {
+            Text(tenorErrorMessage ?? "")
+        }
     }
 
     // MARK: - Topp
@@ -136,15 +150,22 @@ struct MenuContentView: View {
             HStack(spacing: 8) {
                 Menu {
                     ForEach([10, 25, 50, 100], id: \.self) { count in
-                        Button("\(count) brukere") { generateFile(count: count) }
+                        Button("\(count) brukere") { fetchFromTenor(count: count) }
                     }
+                    Divider()
+                    Button("Innstillinger…") { showingSettings = true }
                 } label: {
-                    Label("Generer…", systemImage: "sparkles")
+                    if isFetchingFromTenor {
+                        ProgressView().controlSize(.small)
+                    } else {
+                        Label("Hent fra Tenor…", systemImage: "arrow.down.circle")
+                    }
                 }
                 .menuStyle(.borderlessButton)
                 .menuIndicator(.hidden)
                 .fixedSize()
-                .help("1. Lag en fil med syntetiske testbrukere")
+                .disabled(isFetchingFromTenor)
+                .help("1. Hent testbrukere fra Tenor som finnes i syntetisk folkeregister")
 
                 Button {
                     orderUsers()
@@ -233,17 +254,32 @@ struct MenuContentView: View {
         }
     }
 
-    private func generateFile(count: Int) {
-        let users = TestUserGenerator.generate(count: count)
+    private func fetchFromTenor(count: Int) {
+        guard let credentials = KeychainCredentials.credentials() else {
+            showingSettings = true
+            return
+        }
+        isFetchingFromTenor = true
+        tenorErrorMessage = nil
+        Task {
+            defer { isFetchingFromTenor = false }
+            do {
+                let users = try await TenorClient(credentials: credentials).fetchUsers(count: count)
+                saveUsersToFile(users)
+            } catch {
+                tenorErrorMessage = error.localizedDescription
+            }
+        }
+    }
 
+    private func saveUsersToFile(_ users: [TestUser]) {
         let panel = NSSavePanel()
-        panel.title = "Lagre genererte testbrukere"
+        panel.title = "Lagre testbrukere fra Tenor"
         panel.nameFieldStringValue = "testbrukere.txt"
         panel.allowedContentTypes = [.plainText]
         panel.allowsOtherFileTypes = true
         panel.message = "Last fila opp i BankID preprod (bulk-order) for å bestille brukerne, "
             + "og last den så inn her etterpå."
-
         if panel.runModal() == .OK, let url = panel.url {
             do {
                 try TestUserGenerator.fileData(for: users).write(to: url)

@@ -3,7 +3,7 @@ import FolkomatenKit
 
 struct MaskinportenSettingsView: View {
     private func closeWindow() {
-        NSApp.windows.first { $0.title == "Maskinporten-innstillinger" }?.close()
+        NSApp.windows.first { $0.title == "Innstillinger" }?.close()
     }
 
     @State private var clientId      = CredentialStore.clientId ?? ""
@@ -12,7 +12,22 @@ struct MaskinportenSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Maskinporten-innstillinger")
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Hurtigtast")
+                    .font(.headline)
+                HStack {
+                    Text("Åpne Folkomaten")
+                    Spacer()
+                    ShortcutRecorderView()
+                }
+                Text("Virker overalt – også når menylinje-ikonet er skjult bak notch-en.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Divider()
+
+            Text("Maskinporten")
                 .font(.headline)
 
             VStack(alignment: .leading, spacing: 4) {
@@ -85,7 +100,7 @@ struct MaskinportenSettingsView: View {
             }
         }
         .padding(20)
-        .frame(width: 440, height: 500)
+        .frame(width: 440, height: 580)
     }
 
     private func save() {

@@ -28,6 +28,9 @@ struct MenuContentView: View {
             footer
         }
         .frame(width: 400, height: 480)
+        // Solid, adaptiv bakgrunn (hvit i light mode, mørk grå i dark mode) i
+        // stedet for popoverens gjennomskinnelige grå – gir bedre kontrast.
+        .background(Color(nsColor: .controlBackgroundColor))
         .alert("Tenor-feil", isPresented: Binding(
             get: { tenorErrorMessage != nil },
             set: { if !$0 { tenorErrorMessage = nil } }
@@ -149,7 +152,7 @@ struct MenuContentView: View {
                         Button("\(count) brukere") { fetchFromTenor(count: count) }
                     }
                     Divider()
-                    Button("Innstillinger…") { SettingsWindowController.shared.show() }
+                    Button("Innstillinger…") { closePanel(); SettingsWindowController.shared.show() }
                 } label: {
                     if isFetchingFromTenor {
                         ProgressView().controlSize(.small)
@@ -224,6 +227,12 @@ struct MenuContentView: View {
 
     // MARK: - Handlinger
 
+    /// Lukker det flytende panelet før vi åpner et annet vindu eller en dialog,
+    /// slik at de ikke havner bak panelet (som flyter øverst).
+    private func closePanel() {
+        NSApp.windows.first { $0.identifier == folkomatenPanelIdentifier }?.orderOut(nil)
+    }
+
     private func copy(_ user: TestUser) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(user.fnr, forType: .string)
@@ -234,6 +243,7 @@ struct MenuContentView: View {
     }
 
     private func loadFile() {
+        closePanel()
         let panel = NSOpenPanel()
         panel.title = "Velg fil med testbrukere"
         panel.allowedContentTypes = [.plainText, .text, .commaSeparatedText]
@@ -252,6 +262,7 @@ struct MenuContentView: View {
 
     private func fetchFromTenor(count: Int) {
         guard let credentials = CredentialStore.credentials() else {
+            closePanel()
             SettingsWindowController.shared.show()
             return
         }
@@ -269,6 +280,7 @@ struct MenuContentView: View {
     }
 
     private func saveUsersToFile(_ users: [TestUser]) {
+        closePanel()
         let panel = NSSavePanel()
         panel.title = "Lagre testbrukere fra Tenor"
         panel.nameFieldStringValue = "testbrukere.txt"

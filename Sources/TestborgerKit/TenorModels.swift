@@ -7,39 +7,21 @@ struct TenorResultat: Decodable {
     let dokumentListe: [TenorPerson]?
 }
 
+/// Et freg-dokument slik det kommer når vi ber om `vis=fornavn,etternavn,id`.
+/// Feltene ligger flatt på dokumentet, ikke i nøstede lister.
 struct TenorPerson: Decodable {
-    let identifikasjonsnummer: [TenorIdentifikasjonsnummer]?
-    let navn: [TenorNavn]?
-
-    var gjeldendeFnr: String? {
-        let liste = identifikasjonsnummer ?? []
-        return (liste.first { $0.erGjeldende == true } ?? liste.first)?.foedselsEllerDNummer
-    }
-
-    var gjeldendeNavn: TenorNavn? {
-        let liste = navn ?? []
-        return liste.first { $0.erGjeldende == true } ?? liste.first
-    }
-}
-
-struct TenorIdentifikasjonsnummer: Decodable {
-    let foedselsEllerDNummer: String
-    let erGjeldende: Bool?
-}
-
-struct TenorNavn: Decodable {
+    let id: String?
     let fornavn: String?
     let etternavn: String?
-    let erGjeldende: Bool?
 }
 
 // MARK: - Mapping til TestUser
 
 extension TestUser {
     init?(tenorPerson: TenorPerson) {
-        guard let fnr = tenorPerson.gjeldendeFnr, let navn = tenorPerson.gjeldendeNavn else { return nil }
-        let firstName = (navn.fornavn ?? "").capitalized
-        let lastName  = (navn.etternavn ?? "").capitalized
+        guard let fnr = tenorPerson.id, !fnr.isEmpty else { return nil }
+        let firstName = (tenorPerson.fornavn ?? "").capitalized
+        let lastName  = (tenorPerson.etternavn ?? "").capitalized
         let fullName  = [firstName, lastName].filter { !$0.isEmpty }.joined(separator: " ")
         self.init(
             fnr: fnr,

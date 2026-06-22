@@ -30,7 +30,16 @@ public struct TenorClient: Sendable {
         let token = try await maskinporten.accessToken(scope: Self.scope)
 
         var components = URLComponents(string: Self.baseURL)!
-        components.queryItems = [URLQueryItem(name: "antall", value: "\(count)")]
+        // Be om kun feltene vi trenger. Uten `vis` returnerer freg-søket bare metadata-id.
+        // KQL-filteret holder døde personer og D-numre ute, slik at brukerne kan bestilles
+        // som aktive BankID-testbrukere.
+        components.queryItems = [
+            URLQueryItem(name: "antall", value: "\(count)"),
+            URLQueryItem(name: "kql", value: "personstatus:bosatt and identifikatorType:foedselsnummer"),
+            URLQueryItem(name: "vis", value: "fornavn"),
+            URLQueryItem(name: "vis", value: "etternavn"),
+            URLQueryItem(name: "vis", value: "id"),
+        ]
 
         var req = URLRequest(url: components.url!)
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")

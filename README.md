@@ -1,4 +1,4 @@
-# Testborger
+# Folkomaten
 
 En macOS menylinje-app for å kopiere fødselsnummeret til BankID-testbrukere. Du får
 testbrukerne rett i menylinjen og slipper å lete i en tekstfil.
@@ -85,9 +85,9 @@ for tilgang til preprod-appen.
 Krever Swift 5.9+ (Command Line Tools holder).
 
 ```sh
-cd Testborger
-./Scripts/build-app.sh    # lager Testborger.app
-open Testborger.app
+cd Folkomaten
+./Scripts/build-app.sh    # lager Folkomaten.app
+open Folkomaten.app
 ```
 
 For utvikling: `swift run` kjører appen, `swift test` kjører testene.
@@ -100,12 +100,12 @@ Fra et 11-sifret fødselsnummer `DDMMÅÅiiikk`:
 - **Måned** (3–4): syntetiske numre legger 80 til måneden, H-nummer legger 40, så det trekkes fra.
 - **År** (5–6) og **århundre** fra individnummeret (7–9) etter Skatteetatens regler. Tvetydige syntetiske numre antas å være på 1900-tallet.
 
-Se [`BirthdateParser`](Sources/TestborgerKit/BirthdateParser.swift) og [testene](Tests/TestborgerKitTests/BirthdateParserTests.swift).
+Se [`BirthdateParser`](Sources/FolkomatenKit/BirthdateParser.swift) og [testene](Tests/FolkomatenKitTests/BirthdateParserTests.swift).
 
 ## Teknisk
 
 - SwiftUI `MenuBarExtra`, macOS 13+.
-- Swift Package med to mål: `TestborgerKit` (logikk og data, testbar) og `Testborger` (appen). Bygges fra kommandolinjen, uten Xcode-prosjektfil.
+- Swift Package med to mål: `FolkomatenKit` (logikk og data, testbar) og `Folkomaten` (appen). Bygges fra kommandolinjen, uten Xcode-prosjektfil.
 
 ## Lisens
 

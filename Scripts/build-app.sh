@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
-# Bygger Testborger.app – en kjørbar menylinje-app – fra Swift-pakken.
+# Bygger Folkomaten.app – en kjørbar menylinje-app – fra Swift-pakken.
 # Bruk:  ./Scripts/build-app.sh [debug|release]   (standard: release)
 #
 set -euo pipefail
 
 CONFIG="${1:-release}"
-APP_NAME="Testborger"
-BUNDLE_ID="no.testborger.app"
+APP_NAME="Folkomaten"
+BUNDLE_ID="no.folkomaten.app"
 VERSION="1.0.0"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

@@ -1,5 +1,5 @@
 import SwiftUI
-import TestborgerKit
+import FolkomatenKit
 
 /// Én rad i listen: favoritt-stjerne, navn, fødselsnummer, fødselsdato og kopier-knapp.
 /// Klikk hvor som helst på raden kopierer fødselsnummeret.

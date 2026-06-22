@@ -2,25 +2,25 @@
 import PackageDescription
 
 let package = Package(
-    name: "Testborger",
+    name: "Folkomaten",
     platforms: [.macOS(.v13)],
     targets: [
         // Ren logikk + innebygde data – testbar uten UI.
         .target(
-            name: "TestborgerKit",
-            path: "Sources/TestborgerKit",
+            name: "FolkomatenKit",
+            path: "Sources/FolkomatenKit",
             resources: [.process("Resources")]
         ),
         // SwiftUI menylinje-app.
         .executableTarget(
-            name: "Testborger",
-            dependencies: ["TestborgerKit"],
-            path: "Sources/Testborger"
+            name: "Folkomaten",
+            dependencies: ["FolkomatenKit"],
+            path: "Sources/Folkomaten"
         ),
         .testTarget(
-            name: "TestborgerKitTests",
-            dependencies: ["TestborgerKit"],
-            path: "Tests/TestborgerKitTests"
+            name: "FolkomatenKitTests",
+            dependencies: ["FolkomatenKit"],
+            path: "Tests/FolkomatenKitTests"
         ),
     ]
 )

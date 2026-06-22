@@ -1,6 +1,6 @@
 import Testing
 import Foundation
-@testable import TestborgerKit
+@testable import FolkomatenKit
 
 private func formatted(_ fnr: String) -> String? {
     guard let date = BirthdateParser.birthDate(fromFnr: fnr) else { return nil }

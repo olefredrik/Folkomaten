@@ -16,7 +16,7 @@ public enum CredentialStore {
     private static var fileURL: URL {
         let dir = FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("Testborger", isDirectory: true)
+            .appendingPathComponent("Folkomaten", isDirectory: true)
         return dir.appendingPathComponent("credentials.json")
     }
 

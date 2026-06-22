@@ -1,6 +1,6 @@
 import Testing
 import Foundation
-@testable import TestborgerKit
+@testable import FolkomatenKit
 
 /// Validerer et fødselsnummer ved å regne ut mod-11-kontrollsifrene på nytt.
 private func hasValidControlDigits(_ fnr: String) -> Bool {

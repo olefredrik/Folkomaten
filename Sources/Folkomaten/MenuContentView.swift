@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 import UniformTypeIdentifiers
-import TestborgerKit
+import FolkomatenKit
 
 /// Hovedvinduet som vises når man klikker menylinje-ikonet.
 struct MenuContentView: View {

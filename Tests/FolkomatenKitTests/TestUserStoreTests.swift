@@ -1,6 +1,6 @@
 import Testing
 import Foundation
-@testable import TestborgerKit
+@testable import FolkomatenKit
 
 private func freshDefaults(_ name: String) -> UserDefaults {
     let defaults = UserDefaults(suiteName: name)!

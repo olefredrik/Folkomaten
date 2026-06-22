@@ -1,5 +1,5 @@
 import SwiftUI
-import TestborgerKit
+import FolkomatenKit
 
 struct MaskinportenSettingsView: View {
     private func closeWindow() {

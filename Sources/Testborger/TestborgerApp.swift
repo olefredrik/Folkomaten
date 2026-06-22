@@ -22,10 +22,5 @@ struct TestborgerApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        Window("Maskinporten-innstillinger", id: "maskinporten-settings") {
-            MaskinportenSettingsView()
-        }
-        .windowResizability(.contentSize)
-        .defaultPosition(.center)
     }
 }

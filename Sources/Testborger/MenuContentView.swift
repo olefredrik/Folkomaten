@@ -7,7 +7,6 @@ import TestborgerKit
 struct MenuContentView: View {
     @EnvironmentObject private var store: TestUserStore
     @StateObject private var loginItem = LoginItemController()
-    @Environment(\.openWindow) private var openWindow
     @State private var search = ""
     @State private var onlyFavorites = false
     @State private var copiedFnr: String?
@@ -150,7 +149,7 @@ struct MenuContentView: View {
                         Button("\(count) brukere") { fetchFromTenor(count: count) }
                     }
                     Divider()
-                    Button("Innstillinger…") { openWindow(id: "maskinporten-settings") }
+                    Button("Innstillinger…") { SettingsWindowController.shared.show() }
                 } label: {
                     if isFetchingFromTenor {
                         ProgressView().controlSize(.small)
@@ -253,7 +252,7 @@ struct MenuContentView: View {
 
     private func fetchFromTenor(count: Int) {
         guard let credentials = KeychainCredentials.credentials() else {
-            openWindow(id: "maskinporten-settings")
+            SettingsWindowController.shared.show()
             return
         }
         isFetchingFromTenor = true

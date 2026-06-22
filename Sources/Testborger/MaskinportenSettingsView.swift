@@ -3,7 +3,9 @@ import CryptoKit
 import TestborgerKit
 
 struct MaskinportenSettingsView: View {
-    @Environment(\.dismiss) private var dismiss
+    private func closeWindow() {
+        NSApp.windows.first { $0.title == "Maskinporten-innstillinger" }?.close()
+    }
 
     @State private var clientId      = KeychainCredentials.clientId ?? ""
     @State private var privateKeyPEM = KeychainCredentials.privateKeyPEM ?? ""
@@ -63,7 +65,7 @@ struct MaskinportenSettingsView: View {
             Spacer()
 
             HStack {
-                Button("Avbryt") { dismiss() }
+                Button("Avbryt") { closeWindow() }
                 Spacer()
                 Button("Lagre") { save() }
                     .buttonStyle(.borderedProminent)
@@ -78,7 +80,7 @@ struct MaskinportenSettingsView: View {
     private func save() {
         KeychainCredentials.clientId = clientId.trimmingCharacters(in: .whitespacesAndNewlines)
         KeychainCredentials.privateKeyPEM = privateKeyPEM.trimmingCharacters(in: .whitespacesAndNewlines)
-        dismiss()
+        closeWindow()
     }
 
     private func generateKeyPair() {

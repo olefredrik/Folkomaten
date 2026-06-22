@@ -33,8 +33,8 @@ public enum MaskinportenError: LocalizedError {
 
 /// Henter Maskinporten-tokens via JWT grant-flyten (RS256).
 public actor MaskinportenClient {
-    private static let tokenURL = URL(string: "https://ver2.maskinporten.no/token")!
-    private static let audience = "https://ver2.maskinporten.no/"
+    private static let tokenURL = URL(string: "https://test.maskinporten.no/token")!
+    private static let audience = "https://test.maskinporten.no/"
 
     private let credentials: MaskinportenCredentials
     private var cached: (token: String, expiresAt: Date)?

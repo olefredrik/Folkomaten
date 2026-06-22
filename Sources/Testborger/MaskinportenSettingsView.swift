@@ -64,7 +64,7 @@ struct MaskinportenSettingsView: View {
                 .foregroundStyle(.secondary)
 
                 HStack(spacing: 12) {
-                    Link("Åpne selvbetjeningen (test)",
+                    Link("Åpne selvbetjeningen",
                          destination: URL(string: "https://sjolvbetjening.test.samarbeid.digdir.no/")!)
                     Link("Om Tenor-tilgang",
                          destination: URL(string: "https://skatteetaten.github.io/testnorge-tenor-dokumentasjon/")!)

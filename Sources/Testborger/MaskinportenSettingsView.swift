@@ -17,7 +17,7 @@ struct MaskinportenSettingsView: View {
                 .font(.headline)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Client ID")
+                Text("Klient ID")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 TextField("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", text: $clientId)
@@ -49,7 +49,7 @@ struct MaskinportenSettingsView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("1. Klikk «Generer og kopier JWK» — nøklene lages og privat nøkkel fylles inn automatisk.")
                     Text("2. Lim inn JWK (fra utklippstavlen) som en nøkkel på klienten din i Samarbeidsportalen.")
-                    Text("3. Fyll inn Client ID fra Samarbeidsportalen over.")
+                    Text("3. Fyll inn Klient ID fra Samarbeidsportalen over.")
                     Text("4. Klikk Lagre.")
                 }
                 .font(.caption)

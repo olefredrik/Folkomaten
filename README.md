@@ -61,16 +61,16 @@ selvbetjening for Maskinporten) og opprett en ny klient i **ver2 (test)**-miljø
 
 1. Legg til scopet `skatteetaten:testnorge/testdata.read`.
 2. Sett access token-levetid (f.eks. 120 sekunder).
-3. Lagre klienten og noter **Client ID**.
+3. Lagre klienten og noter **Klient ID**.
 
-### 3. Legg inn nøkkel og Client ID i appen
+### 3. Legg inn nøkkel og Klient ID i appen
 
 Åpne **Hent fra Tenor… → Innstillinger…** i appen:
 
 1. Klikk **Generer og kopier JWK**. Appen lager et ES256-nøkkelpar, fyller inn den private
    nøkkelen og kopierer den offentlige nøkkelen (JWK) til utklippstavlen.
 2. Lim inn JWK-en som en nøkkel på klienten i Samarbeidsportalen.
-3. Lim inn **Client ID** i appen og klikk **Lagre**.
+3. Lim inn **Klient ID** i appen og klikk **Lagre**.
 
 Den private nøkkelen lagres trygt i macOS-nøkkelringen og forlater aldri maskinen din.
 Når dette er gjort, virker **Hent fra Tenor…**.

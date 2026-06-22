@@ -3,15 +3,15 @@ import CryptoKit
 import TestborgerKit
 
 struct MaskinportenSettingsView: View {
-    @Binding var isPresented: Bool
+    @Environment(\.dismiss) private var dismiss
 
-    @State private var clientId     = KeychainCredentials.clientId ?? ""
+    @State private var clientId      = KeychainCredentials.clientId ?? ""
     @State private var privateKeyPEM = KeychainCredentials.privateKeyPEM ?? ""
-    @State private var jwkCopied    = false
+    @State private var jwkCopied     = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Maskinporten-legitimasjon")
+            Text("Maskinporten-innstillinger")
                 .font(.headline)
 
             VStack(alignment: .leading, spacing: 4) {
@@ -39,26 +39,31 @@ struct MaskinportenSettingsView: View {
             Divider()
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Generer nytt ES256-nøkkelpar")
+                Text("Første gang? Generer et nøkkelpar:")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
-                Text("Lager et nytt nøkkelpar, fyller inn den private nøkkelen over, "
-                     + "og kopierer public key (JWK) til utklippstavlen for opplasting i Samarbeidsportalen.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("1. Klikk «Generer og kopier JWK» — nøklene lages og privat nøkkel fylles inn automatisk.")
+                    Text("2. Lim inn JWK (fra utklippstavlen) som en nøkkel på klienten din i Samarbeidsportalen.")
+                    Text("3. Fyll inn Client ID fra Samarbeidsportalen over.")
+                    Text("4. Klikk Lagre.")
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
 
                 Button(jwkCopied ? "JWK kopiert!" : "Generer og kopier JWK") {
                     generateKeyPair()
                 }
                 .disabled(jwkCopied)
+                .padding(.top, 2)
             }
 
             Spacer()
 
             HStack {
-                Button("Avbryt") { isPresented = false }
+                Button("Avbryt") { dismiss() }
                 Spacer()
                 Button("Lagre") { save() }
                     .buttonStyle(.borderedProminent)
@@ -67,19 +72,18 @@ struct MaskinportenSettingsView: View {
             }
         }
         .padding(20)
-        .frame(width: 420, height: 400)
+        .frame(width: 440, height: 430)
     }
 
     private func save() {
         KeychainCredentials.clientId = clientId.trimmingCharacters(in: .whitespacesAndNewlines)
         KeychainCredentials.privateKeyPEM = privateKeyPEM.trimmingCharacters(in: .whitespacesAndNewlines)
-        isPresented = false
+        dismiss()
     }
 
     private func generateKeyPair() {
         let key = P256.Signing.PrivateKey()
-        let pem = key.pemRepresentation
-        privateKeyPEM = pem
+        privateKeyPEM = key.pemRepresentation
 
         let raw = key.publicKey.rawRepresentation     // 64 bytes: x(32) || y(32)
         let x = raw[0..<32].base64url

@@ -7,12 +7,12 @@ import TestborgerKit
 struct MenuContentView: View {
     @EnvironmentObject private var store: TestUserStore
     @StateObject private var loginItem = LoginItemController()
+    @Environment(\.openWindow) private var openWindow
     @State private var search = ""
     @State private var onlyFavorites = false
     @State private var copiedFnr: String?
     @State private var isFetchingFromTenor = false
     @State private var tenorErrorMessage: String?
-    @State private var showingSettings = false
 
     private var results: [TestUser] {
         store.filtered(search: search, onlyFavorites: onlyFavorites)
@@ -29,9 +29,6 @@ struct MenuContentView: View {
             footer
         }
         .frame(width: 400, height: 480)
-        .sheet(isPresented: $showingSettings) {
-            MaskinportenSettingsView(isPresented: $showingSettings)
-        }
         .alert("Tenor-feil", isPresented: Binding(
             get: { tenorErrorMessage != nil },
             set: { if !$0 { tenorErrorMessage = nil } }
@@ -153,7 +150,7 @@ struct MenuContentView: View {
                         Button("\(count) brukere") { fetchFromTenor(count: count) }
                     }
                     Divider()
-                    Button("Innstillinger…") { showingSettings = true }
+                    Button("Innstillinger…") { openWindow(id: "maskinporten-settings") }
                 } label: {
                     if isFetchingFromTenor {
                         ProgressView().controlSize(.small)
@@ -256,7 +253,7 @@ struct MenuContentView: View {
 
     private func fetchFromTenor(count: Int) {
         guard let credentials = KeychainCredentials.credentials() else {
-            showingSettings = true
+            openWindow(id: "maskinporten-settings")
             return
         }
         isFetchingFromTenor = true

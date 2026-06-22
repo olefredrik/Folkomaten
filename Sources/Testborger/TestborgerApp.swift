@@ -21,5 +21,11 @@ struct TestborgerApp: App {
                 .environmentObject(store)
         }
         .menuBarExtraStyle(.window)
+
+        Window("Maskinporten-innstillinger", id: "maskinporten-settings") {
+            MaskinportenSettingsView()
+        }
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
     }
 }

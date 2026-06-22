@@ -251,7 +251,7 @@ struct MenuContentView: View {
     }
 
     private func fetchFromTenor(count: Int) {
-        guard let credentials = KeychainCredentials.credentials() else {
+        guard let credentials = CredentialStore.credentials() else {
             SettingsWindowController.shared.show()
             return
         }

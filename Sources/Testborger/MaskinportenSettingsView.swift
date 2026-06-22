@@ -6,9 +6,9 @@ struct MaskinportenSettingsView: View {
         NSApp.windows.first { $0.title == "Maskinporten-innstillinger" }?.close()
     }
 
-    @State private var clientId      = KeychainCredentials.clientId ?? ""
-    @State private var kid           = KeychainCredentials.kid ?? ""
-    @State private var privateKeyPEM = KeychainCredentials.privateKeyPEM ?? ""
+    @State private var clientId      = CredentialStore.clientId ?? ""
+    @State private var kid           = CredentialStore.kid ?? ""
+    @State private var privateKeyPEM = CredentialStore.privateKeyPEM ?? ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -89,9 +89,9 @@ struct MaskinportenSettingsView: View {
     }
 
     private func save() {
-        KeychainCredentials.clientId = clientId.trimmingCharacters(in: .whitespacesAndNewlines)
-        KeychainCredentials.kid = kid.trimmingCharacters(in: .whitespacesAndNewlines)
-        KeychainCredentials.privateKeyPEM = privateKeyPEM.trimmingCharacters(in: .whitespacesAndNewlines)
+        CredentialStore.clientId = clientId.trimmingCharacters(in: .whitespacesAndNewlines)
+        CredentialStore.kid = kid.trimmingCharacters(in: .whitespacesAndNewlines)
+        CredentialStore.privateKeyPEM = privateKeyPEM.trimmingCharacters(in: .whitespacesAndNewlines)
         closeWindow()
     }
 }

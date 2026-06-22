@@ -8,7 +8,8 @@ set -euo pipefail
 CONFIG="${1:-release}"
 APP_NAME="Folkomaten"
 BUNDLE_ID="no.folkomaten.app"
-VERSION="1.0.0"
+# Kan overstyres av miljøet (release-workflowen setter VERSION fra git-taggen).
+VERSION="${VERSION:-1.0.0}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"

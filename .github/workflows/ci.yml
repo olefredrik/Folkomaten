@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build og test
+    # macOS-runner med Xcode 16 (Swift Testing kreves av testene).
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Swift-versjon
+        run: swift --version
+
+      - name: Bygg
+        run: swift build -c release
+
+      - name: Test
+        run: swift test

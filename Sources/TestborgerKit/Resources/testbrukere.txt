@@ -45,3 +45,6 @@
 10911049649,Intrikat Bas,Bas,Intrikat
 29880448895,Søt Labyrint,Labyrint,Søt
 05869797539,Eventyrlig Kusine,Kusine,Eventyrlig
+16857698537,Konge Invitasjon,Invitasjon,Konge
+11868397642,Livlig Smaragd,Smaragd,Livlig
+04847897150,Kjent Ingress,Ingress,Kjent

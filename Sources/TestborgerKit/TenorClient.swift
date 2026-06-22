@@ -15,8 +15,8 @@ public enum TenorError: LocalizedError {
 }
 
 public struct TenorClient: Sendable {
-    // Oppdater path ved behov når scopet er aktivert og endepunktet er bekreftet.
-    private static let baseURL = "https://testdata.api.skatteetaten.no/api/testnorge/v2/freg"
+    /// Søk i folkeregister-kilden (`freg`) i Tenor testdatasøk.
+    private static let baseURL = "https://testdata.api.skatteetaten.no/api/testnorge/v2/soek/freg"
     private static let scope   = "skatteetaten:testnorge/testdata.read"
 
     private let maskinporten: MaskinportenClient
@@ -25,7 +25,7 @@ public struct TenorClient: Sendable {
         self.maskinporten = MaskinportenClient(credentials: credentials)
     }
 
-    /// Henter `count` tilfeldige testpersoner fra Tenor og returnerer dem som `TestUser`.
+    /// Henter `count` testpersoner fra Tenor og returnerer dem som `TestUser`.
     public func fetchUsers(count: Int) async throws -> [TestUser] {
         let token = try await maskinporten.accessToken(scope: Self.scope)
 
@@ -34,6 +34,7 @@ public struct TenorClient: Sendable {
 
         var req = URLRequest(url: components.url!)
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
 
         let (data, response) = try await URLSession.shared.data(for: req)
         if let http = response as? HTTPURLResponse, http.statusCode != 200 {
@@ -41,12 +42,8 @@ public struct TenorClient: Sendable {
             throw TenorError.httpError(statusCode: http.statusCode, body: body)
         }
 
-        // Tenor returnerer antakelig en JSON-array av FREG-dokumenter.
-        // Dersom responsen er et wrapper-objekt med "data"-felt, bytt til:
-        //   struct Wrapper: Decodable { let data: [TenorPerson] }
-        //   let persons = try JSONDecoder().decode(Wrapper.self, from: data).data
-        let persons = try JSONDecoder().decode([TenorPerson].self, from: data)
-        let users = persons.compactMap { TestUser(tenorPerson: $0) }
+        let result = try JSONDecoder().decode(TenorResultat.self, from: data)
+        let users = (result.dokumentListe ?? []).compactMap { TestUser(tenorPerson: $0) }
 
         if users.isEmpty { throw TenorError.noResults }
         return users

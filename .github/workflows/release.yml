@@ -1,0 +1,39 @@
+name: Release
+
+# Bygger Folkomaten.app og publiserer en zippet build på en GitHub Release
+# når en versjonstag (vX.Y.Z) pushes.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Bygg og publiser
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Utled versjon fra tag
+        id: ver
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Bygg appen
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: ./Scripts/build-app.sh release
+
+      - name: Zip appen
+        run: ditto -c -k --keepParent Folkomaten.app "Folkomaten-${{ steps.ver.outputs.version }}.zip"
+
+      - name: Opprett GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "Folkomaten-${{ steps.ver.outputs.version }}.zip" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes

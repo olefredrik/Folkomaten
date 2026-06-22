@@ -1,5 +1,12 @@
 # Folkomaten
 
+[![Release](https://img.shields.io/github/v/release/olefredrik/Folkomaten?sort=semver)](https://github.com/olefredrik/Folkomaten/releases)
+[![Tester](https://img.shields.io/github/actions/workflow/status/olefredrik/Folkomaten/ci.yml?branch=main&label=tester)](https://github.com/olefredrik/Folkomaten/actions/workflows/ci.yml)
+[![Status](https://img.shields.io/badge/status-active-brightgreen)](https://github.com/olefredrik/Folkomaten)
+[![macOS](https://img.shields.io/badge/macOS-13%2B-black?logo=apple&logoColor=white)](https://www.apple.com/macos/)
+[![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange?logo=swift&logoColor=white)](https://swift.org)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 En macOS menylinje-app som enkelt lar deg kopiere fødselsnummeret til en BankID-testbruker. De samme brukerne finnes også i Det Sentrale Folkeregisteret (DSF) sin database over gyldige testbrukere. Dette gjør Folkomaten til et nyttig verktøy når du bare trenger en testbruker kjapt, uten å måtte grave i sidesystemer eller lokale tekstfiler.
 
 ## Funksjoner

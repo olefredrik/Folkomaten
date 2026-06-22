@@ -62,8 +62,8 @@ struct MaskinportenSettingsView: View {
                 .padding(.top, 2)
 
                 HStack(spacing: 12) {
-                    Link("Åpne Samarbeidsportalen",
-                         destination: URL(string: "https://sjolvbetjening.samarbeid.digdir.no/")!)
+                    Link("Åpne selvbetjeningen (test)",
+                         destination: URL(string: "https://sjolvbetjening.test.samarbeid.digdir.no/")!)
                     Link("Om Tenor-tilgang",
                          destination: URL(string: "https://skatteetaten.github.io/testnorge-tenor-dokumentasjon/")!)
                 }

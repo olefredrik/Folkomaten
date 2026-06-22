@@ -50,8 +50,8 @@ scopet `skatteetaten:testnorge/testdata.read`.
 
 ### 2. Opprett en Maskinporten-klient
 
-Logg inn i [Samarbeidsportalen](https://sjolvbetjening.samarbeid.digdir.no/) og opprett en
-klient i **ver2 (test)**:
+Logg inn i [selvbetjeningen for test (ver2)](https://sjolvbetjening.test.samarbeid.digdir.no/)
+og opprett en klient:
 
 1. Legg til scopet `skatteetaten:testnorge/testdata.read`.
 2. Sett access token-levetid, for eksempel 120 sekunder.

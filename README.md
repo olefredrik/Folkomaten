@@ -1,19 +1,19 @@
 # Folkomaten
 
-En macOS menylinje-app for å kopiere fødselsnummeret til BankID-testbrukere. Du får
-testbrukerne rett i menylinjen og slipper å lete i en tekstfil.
+En macOS menylinje-app som enkelt lar deg kopiere fødselsnummeret til en BankID-testbruker. De samme brukerne finnes også i Det Sentrale Folkeregisteret (DSF) sin database over gyldige testbrukere. Dette gjør Folkomaten til et nyttig verktøy når du bare trenger en testbruker kjapt, uten å måtte grave i sidesystemer eller lokale tekstfiler.
 
 ## Funksjoner
 
-- **Kopier fødselsnummer** med ett klikk (klikk raden eller kopier-ikonet).
+- 50 syntetiske eksempelbrukere er innebygd, så appen virker med en gang.
+- **Kopier fødselsnummer** med ett klikk
+- **Global hurtigtast**: åpne appen med `⌃⌥⌘F` uansett hvilken app du er i – også når menylinje-ikonet er skjult bak notch-en på en full menylinje. Snarveien kan endres i innstillingene.
 - **Favoritter**: marker brukerne du bruker ofte, og filtrer på dem.
-- **Fødselsdato** utledes fra fødselsnummeret (syntetiske Tenor-numre, D-nummer og århundre fra individnummer).
+- **Fødselsdato** utledes fra fødselsnummeret (syntetiske Tenor-numre)
 - **Søk** på navn eller fødselsnummer.
+- **Hent nye testbrukere fra Tenor**: hent syntetiske testpersoner som finnes i folkeregisteret i test. Henter kun ordinære fødselsnummer (ikke D-nummer), myndige og bosatte, så alle kan bestilles i BankID (se [Hente testbrukere](#hente-testbrukere)).
 - **Last inn egne filer**: leser både UTF-16 (slik BankID preprod lager dem) og UTF-8. Sist brukte fil huskes til neste oppstart.
-- **Hent fra Tenor**: hent syntetiske testpersoner som finnes i folkeregisteret i test (se [Hente testbrukere](#hente-testbrukere)).
 - **Start ved innlogging**: la appen starte automatisk når du logger inn.
 - **Tøm liste**: start tomt. Valget huskes, og du henter de innebygde tilbake med **Last inn eksempelbrukere**.
-- 50 syntetiske eksempelbrukere er innebygd, så appen virker med en gang.
 
 ## Filformat
 
@@ -28,13 +28,16 @@ Fødselsnumrene er syntetiske og tilhører ingen virkelige personer.
 
 ## Hente testbrukere
 
-Testbrukerne hentes fra Tenor, så de finnes i folkeregisteret i test. Deretter bestiller
+Testbrukerne hentes fra Tenor, så de finnes i folkeregisteret (DSF) i test. Deretter bestiller
 du dem i BankID preprod før de virker mot BankID:
 
 1. Klikk **Hent fra Tenor…** og velg antall. Appen henter brukerne og lagrer dem som fil. Krever [oppsett](#oppsett-tilgang-til-tenor).
 2. Klikk **Bestill…** (åpner <https://ra-preprod.bankidnorge.no/#!/bulk-order>) og last opp fila.
 3. Trykk **Order** og vent til bestillingen er fullført.
 4. Klikk **Bruk i appen…** og velg fila.
+
+Appen henter kun ordinære fødselsnummer (ikke D-nummer), myndige og bosatte personer,
+slik at alle kan bestilles. Den overhenter litt og trimmer ned, så du får antallet du ba om.
 
 Brukerne virker mot BankID først når de er bestilt i portalen.
 
@@ -67,7 +70,8 @@ og opprett en klient:
 3. **Privat nøkkel (PEM)** du lastet ned.
 4. Klikk **Lagre**.
 
-Den private nøkkelen lagres i macOS-nøkkelringen og forlater aldri maskinen. Nå virker
+Legitimasjonen lagres i en fil under `~/Library/Application Support/Folkomaten/`
+(kun lesbar for deg, rettigheter `0600`) og forlater aldri maskinen. Nå virker
 **Hent fra Tenor…**.
 
 ## Innlogging i BankID preprod
@@ -104,7 +108,7 @@ Se [`BirthdateParser`](Sources/FolkomatenKit/BirthdateParser.swift) og [testene]
 
 ## Teknisk
 
-- SwiftUI `MenuBarExtra`, macOS 13+.
+- Menylinje-UI med AppKit `NSStatusItem` + `NSPopover`, og en global hurtigtast (Carbon `RegisterEventHotKey`) som åpner et flytende panel når ikonet er skjult. SwiftUI for selve innholdet. macOS 13+.
 - Swift Package med to mål: `FolkomatenKit` (logikk og data, testbar) og `Folkomaten` (appen). Bygges fra kommandolinjen, uten Xcode-prosjektfil.
 
 ## Lisens

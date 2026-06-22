@@ -26,15 +26,20 @@ public struct TenorClient: Sendable {
     }
 
     /// Henter `count` testpersoner fra Tenor og returnerer dem som `TestUser`.
+    ///
+    /// Døde/ikke-bosatte holdes ute server-side via KQL (`personstatus:bosatt`).
+    /// D-numre og mindreårige siles bort klientside med `TestUserFilter`, slik at
+    /// alle returnerte brukere kan bestilles som aktive BankID-testbrukere. Vi
+    /// overhenter litt for at antallet skal holde etter filtrering.
     public func fetchUsers(count: Int) async throws -> [TestUser] {
         let token = try await maskinporten.accessToken(scope: Self.scope)
 
+        let requested = min(max(count * 2, count), 100)
+
         var components = URLComponents(string: Self.baseURL)!
         // Be om kun feltene vi trenger. Uten `vis` returnerer freg-søket bare metadata-id.
-        // KQL-filteret holder døde personer og D-numre ute, slik at brukerne kan bestilles
-        // som aktive BankID-testbrukere.
         components.queryItems = [
-            URLQueryItem(name: "antall", value: "\(count)"),
+            URLQueryItem(name: "antall", value: "\(requested)"),
             URLQueryItem(name: "kql", value: "personstatus:bosatt and identifikatorType:foedselsnummer"),
             URLQueryItem(name: "vis", value: "fornavn"),
             URLQueryItem(name: "vis", value: "etternavn"),
@@ -52,9 +57,13 @@ public struct TenorClient: Sendable {
         }
 
         let result = try JSONDecoder().decode(TenorResultat.self, from: data)
-        let users = (result.dokumentListe ?? []).compactMap { TestUser(tenorPerson: $0) }
+        let now = Date()
+        let users = (result.dokumentListe ?? [])
+            .compactMap { TestUser(tenorPerson: $0) }
+            .filter { TestUserFilter.isOrderable($0.fnr, on: now) }
+            .prefix(count)
 
         if users.isEmpty { throw TenorError.noResults }
-        return users
+        return Array(users)
     }
 }

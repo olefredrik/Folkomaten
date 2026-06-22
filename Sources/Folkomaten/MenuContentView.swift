@@ -12,6 +12,7 @@ struct MenuContentView: View {
     @State private var copiedFnr: String?
     @State private var isFetchingFromTenor = false
     @State private var tenorErrorMessage: String?
+    @State private var showDataActions = false
 
     private var results: [TestUser] {
         store.filtered(search: search, onlyFavorites: onlyFavorites)
@@ -120,13 +121,35 @@ struct MenuContentView: View {
 
     // MARK: - Testbrukere (generer → bestill → last inn)
 
+    /// Steg-etikett med fast ikonbredde, så tallene 1/2/3 står på linje selv om
+    /// SF-symbolene har ulik intrinsisk bredde.
+    private func stepLabel(_ number: Int, _ title: String, systemImage: String) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: systemImage)
+                .frame(width: 20)
+            Text("\(number). \(title)")
+        }
+    }
+
     private var dataActions: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text("Testbrukere")
-                    .font(.caption)
-                    .fontWeight(.semibold)
+                Button {
+                    withAnimation(.easeInOut(duration: 0.18)) { showDataActions.toggle() }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                            .rotationEffect(.degrees(showDataActions ? 90 : 0))
+                        Text("Nye testbrukere")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                    }
                     .foregroundStyle(.secondary)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .help("Hent og bestill nye testbrukere – sjelden nødvendig")
 
                 Spacer()
 
@@ -146,7 +169,8 @@ struct MenuContentView: View {
                 .help("Flere valg for lista")
             }
 
-            HStack(spacing: 8) {
+            if showDataActions {
+                VStack(alignment: .leading, spacing: 10) {
                 Menu {
                     ForEach([10, 25, 50, 100], id: \.self) { count in
                         Button("\(count) brukere") { fetchFromTenor(count: count) }
@@ -155,35 +179,37 @@ struct MenuContentView: View {
                     Button("Innstillinger…") { closePanel(); SettingsWindowController.shared.show() }
                 } label: {
                     if isFetchingFromTenor {
-                        ProgressView().controlSize(.small)
+                        HStack(spacing: 6) {
+                            ProgressView().controlSize(.small).frame(width: 20)
+                            Text("Henter …")
+                        }
                     } else {
-                        Label("Hent fra Tenor…", systemImage: "arrow.down.circle")
+                        stepLabel(1, "Hent fra Tenor", systemImage: "arrow.down.circle")
                     }
                 }
-                .menuStyle(.borderlessButton)
+                .menuStyle(.button)
                 .menuIndicator(.hidden)
-                .fixedSize()
                 .disabled(isFetchingFromTenor)
-                .help("1. Hent testbrukere fra Tenor som finnes i syntetisk folkeregister")
+                .help("Hent testbrukere fra Tenor som finnes i syntetisk folkeregister")
 
                 Button {
                     orderUsers()
                 } label: {
-                    Label("Bestill…", systemImage: "arrow.up.forward.app")
+                    stepLabel(2, "Koble til BankID", systemImage: "arrow.up.forward.app")
                 }
-                .help("2. Åpne BankID preprod (bulk-order) og last opp fila. "
+                .help("Åpne BankID preprod (bulk-order) og last opp fila. "
                       + "Brukerne virker først etter at de er bestilt der.")
 
                 Button {
                     loadFile()
                 } label: {
-                    Label("Bruk i appen…", systemImage: "tray.and.arrow.down")
+                    stepLabel(3, "Last inn i appen", systemImage: "tray.and.arrow.down")
                 }
-                .help("3. Velg den bestilte fila og ta den i bruk i appen")
-
-                Spacer()
+                .help("Velg den bestilte fila og ta den i bruk i appen")
+                }
+                .buttonStyle(.plain)
+                .transition(.opacity.combined(with: .move(edge: .top)))
             }
-            .buttonStyle(.borderless)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
@@ -218,7 +244,7 @@ struct MenuContentView: View {
             Button {
                 NSApp.terminate(nil)
             } label: {
-                Label("Avslutt", systemImage: "power")
+                Label("Avslutt", systemImage: "rectangle.portrait.and.arrow.right")
             }
             .buttonStyle(.borderless)
         }

@@ -75,7 +75,8 @@ public actor MaskinportenClient {
 
     private func buildAssertion(privateKey: P256.Signing.PrivateKey, scope: String) throws -> String {
         let now = Int(Date().timeIntervalSince1970)
-        let header = ["alg": "ES256", "typ": "JWT"]
+        // kid må matche nøkkelen registrert i Samarbeidsportalen (samme RFC 7638-thumbprint).
+        let header = ["alg": "ES256", "typ": "JWT", "kid": ECKeyJWK.kid(for: privateKey.publicKey)]
         let payload: [String: Any] = [
             "iss": credentials.clientId,
             "aud": Self.audience,

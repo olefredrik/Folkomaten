@@ -96,11 +96,7 @@ struct MaskinportenSettingsView: View {
         let key = P256.Signing.PrivateKey()
         privateKeyPEM = key.pemRepresentation
 
-        let raw = Array(key.publicKey.rawRepresentation)  // 64 bytes: x(32) || y(32)
-        guard raw.count == 64 else { return }
-        let x = Data(raw[0..<32]).base64url
-        let y = Data(raw[32..<64]).base64url
-        let jwk: [String: Any] = ["kty": "EC", "crv": "P-256", "x": x, "y": y]
+        let jwk = ECKeyJWK.publicJWK(for: key.publicKey)
 
         if let data = try? JSONSerialization.data(withJSONObject: jwk, options: .prettyPrinted),
            let str = String(data: data, encoding: .utf8) {

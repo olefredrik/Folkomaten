@@ -55,27 +55,6 @@ for mer om tilgang til preprod-appen.
 
 ## Installasjon
 
-### Via Homebrew (anbefalt)
-
-```sh
-brew tap olefredrik/tap
-brew install testborger         # bygger og installerer siste release
-testborger                      # starter appen i menylinjen
-```
-
-Vil du ha siste utvikling fra `main` i stedet for siste release:
-
-```sh
-brew install --HEAD olefredrik/tap/testborger
-```
-
-Formelen bygger fra kildekode lokalt. Appen blir ad-hoc-signert og kjører uten
-Gatekeeper-advarsel, så du trenger ikke Apple Developer Program. Command Line Tools
-holder; full Xcode er ikke nødvendig. Homebrew kan be deg oppdatere Command Line Tools
-til siste versjon før den bygger.
-
-### Bygg selv
-
 Krever Swift 5.9+ (Command Line Tools holder).
 
 ```sh

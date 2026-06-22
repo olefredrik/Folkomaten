@@ -63,7 +63,7 @@ selvbetjening for Maskinporten) og opprett en ny klient i **ver2 (test)**-miljø
 2. Sett access token-levetid (f.eks. 120 sekunder).
 3. Lagre klienten og noter **Client ID**.
 
-### 3. Legg inn legitimasjon i appen
+### 3. Legg inn nøkkel og Client ID i appen
 
 Åpne **Hent fra Tenor… → Innstillinger…** i appen:
 

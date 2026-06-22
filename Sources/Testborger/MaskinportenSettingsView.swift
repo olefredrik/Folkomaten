@@ -60,6 +60,15 @@ struct MaskinportenSettingsView: View {
                 }
                 .disabled(jwkCopied)
                 .padding(.top, 2)
+
+                HStack(spacing: 12) {
+                    Link("Åpne Samarbeidsportalen",
+                         destination: URL(string: "https://sjolvbetjening.samarbeid.digdir.no/")!)
+                    Link("Om Tenor-tilgang",
+                         destination: URL(string: "https://skatteetaten.github.io/testnorge-tenor-dokumentasjon/")!)
+                }
+                .font(.caption)
+                .padding(.top, 2)
             }
 
             Spacer()
@@ -74,7 +83,7 @@ struct MaskinportenSettingsView: View {
             }
         }
         .padding(20)
-        .frame(width: 440, height: 430)
+        .frame(width: 440, height: 470)
     }
 
     private func save() {

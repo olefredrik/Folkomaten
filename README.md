@@ -12,8 +12,8 @@ Du får testbrukerne rett i menylinjen og slipper å lete i en tekstfil på skri
 - 🔎 **Søk** på navn eller fødselsnummer.
 - 📂 **Last inn egne filer**: leser både UTF-16 (slik BankID preprod genererer dem) og UTF-8.
   Appen husker sist brukte fil til neste oppstart.
-- ✨ **Generer fil**: lag en fil med syntetiske testbrukere du kan laste opp i BankID preprod
-  for å bestille dem (se [Bestille nye testbrukere](#bestille-nye-testbrukere)).
+- 🔗 **Hent fra Tenor**: hent ekte syntetiske testpersoner fra Tenor testdatasøk, slik at de
+  finnes i folkeregisteret i test (se [Hente nye testbrukere](#hente-nye-testbrukere)).
 - 🚀 **Start ved innlogging**: huk av for at appen skal starte automatisk når du logger inn.
 - 🧹 **Tøm liste**: start friskt med egne testbrukere. Valget huskes til neste oppstart, og du
   kan når som helst hente de innebygde tilbake med **Last inn eksempelbrukere**.
@@ -30,18 +30,50 @@ fødselsnummer,fullt navn,etternavn,fornavn
 
 Fødselsnumrene er **syntetiske** testnumre fra Tenor og tilhører ingen virkelige personer.
 
-## Bestille nye testbrukere
+## Hente nye testbrukere
 
-For at testbrukerne skal virke mot BankID må de bestilles i BankID preprod sin bulk-order-portal:
+Testbrukerne hentes fra Tenor, slik at de finnes i folkeregisteret i test. Deretter
+bestilles de i BankID preprod sin bulk-order-portal før de virker mot BankID:
 
-1. Lag en fil i formatet over. Klikk **Generer…** i appen for å lage en med gyldige
-   syntetiske fødselsnummer og tilfeldige navn.
+1. Klikk **Hent fra Tenor…** i appen og velg antall. Appen henter testpersoner og lagrer
+   dem som en fil i formatet over. (Krever oppsett, se [Oppsett: tilgang til Tenor](#oppsett-tilgang-til-tenor).)
 2. Klikk **Bestill…** i appen (åpner <https://ra-preprod.bankidnorge.no/#!/bulk-order>)
    og last opp fila.
 3. Trykk **Order** og vent til bestillingen er fullført.
 4. Ta fila i bruk i appen med **Bruk i appen…**.
 
-Generer-knappen lager bare fila. Brukerne fungerer først etter at de er bestilt i portalen.
+Brukerne fungerer mot BankID først etter at de er bestilt i portalen.
+
+## Oppsett: tilgang til Tenor
+
+For å hente testbrukere fra Tenor må appen autentisere seg mot Skatteetatens søke-API via
+Maskinporten. Dette settes opp én gang per maskin.
+
+### 1. Be om tilgang til scopet
+
+Send en e-post til <Tenor@skatteetaten.no> med organisasjonsnummeret deres og be om tilgang
+til scopet `skatteetaten:testnorge/testdata.read`.
+
+### 2. Opprett en Maskinporten-klient
+
+Logg inn i [Samarbeidsportalen](https://sjolvbetjening.samarbeid.digdir.no/) (Digdirs
+selvbetjening for Maskinporten) og opprett en ny klient i **ver2 (test)**-miljøet:
+
+1. Legg til scopet `skatteetaten:testnorge/testdata.read`.
+2. Sett access token-levetid (f.eks. 120 sekunder).
+3. Lagre klienten og noter **Client ID**.
+
+### 3. Legg inn legitimasjon i appen
+
+Åpne **Hent fra Tenor… → Innstillinger…** i appen:
+
+1. Klikk **Generer og kopier JWK**. Appen lager et ES256-nøkkelpar, fyller inn den private
+   nøkkelen og kopierer den offentlige nøkkelen (JWK) til utklippstavlen.
+2. Lim inn JWK-en som en nøkkel på klienten i Samarbeidsportalen.
+3. Lim inn **Client ID** i appen og klikk **Lagre**.
+
+Den private nøkkelen lagres trygt i macOS-nøkkelringen og forlater aldri maskinen din.
+Når dette er gjort, virker **Hent fra Tenor…**.
 
 ## Innlogging i BankID preprod
 
@@ -58,8 +90,7 @@ for mer om tilgang til preprod-appen.
 Krever Swift 5.9+ (Command Line Tools holder).
 
 ```sh
-git clone https://github.com/olefredrik/testborger.git
-cd testborger
+cd Testborger
 ./Scripts/build-app.sh          # lager Testborger.app
 open Testborger.app
 ```

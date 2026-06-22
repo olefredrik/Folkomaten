@@ -13,7 +13,7 @@ final class SettingsWindowController: NSWindowController {
         let window = NSWindow(contentViewController: hosting)
         window.title = "Maskinporten-innstillinger"
         window.styleMask = [.titled, .closable]
-        window.setContentSize(NSSize(width: 440, height: 430))
+        window.setContentSize(NSSize(width: 440, height: 470))
         window.center()
         super.init(window: window)
     }

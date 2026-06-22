@@ -8,8 +8,11 @@ set -euo pipefail
 CONFIG="${1:-release}"
 APP_NAME="Folkomaten"
 BUNDLE_ID="no.folkomaten.app"
-# Kan overstyres av miljøet (release-workflowen setter VERSION fra git-taggen).
-VERSION="${VERSION:-1.0.0}"
+# Versjonen kommer fra miljøet hvis satt (release-workflowen sender VERSION fra
+# git-taggen), ellers utledes den fra siste tag, med en dev-fallback for et
+# repo helt uten tagger.
+VERSION="${VERSION:-$(git -C "$(dirname "$0")/.." describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || true)}"
+VERSION="${VERSION:-0.0.0-dev}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"

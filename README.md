@@ -55,15 +55,17 @@ og opprett en klient:
 
 1. Legg til scopet `skatteetaten:testnorge/testdata.read`.
 2. Sett access token-levetid, for eksempel 120 sekunder.
-3. Lagre, og noter **Klient ID**.
+3. Legg til en nøkkel, og velg å få en generert nøkkel. Last ned privatnøkkelen (PEM).
+4. Noter **Klient ID** og nøkkelens **kid**.
 
 ### 3. Legg inn nøkkel og Klient ID
 
-Åpne **Hent fra Tenor… → Innstillinger…**:
+Åpne **Hent fra Tenor… → Innstillinger…** og fyll inn:
 
-1. Klikk **Generer og kopier JWK**. Appen lager et nøkkelpar, fyller inn den private nøkkelen og kopierer den offentlige (JWK).
-2. Lim inn JWK-en som nøkkel på klienten i Samarbeidsportalen.
-3. Lim inn **Klient ID** og klikk **Lagre**.
+1. **Klient ID** fra portalen.
+2. **Nøkkel-ID (kid)** fra nøkkelen du la til.
+3. **Privat nøkkel (PEM)** du lastet ned.
+4. Klikk **Lagre**.
 
 Den private nøkkelen lagres i macOS-nøkkelringen og forlater aldri maskinen. Nå virker
 **Hent fra Tenor…**.

@@ -1,31 +1,37 @@
-import CryptoKit
 import Foundation
+import Security
 
 public struct MaskinportenCredentials: Sendable {
     public let clientId: String
     public let privateKeyPEM: String
+    /// Nøkkel-ID fra Samarbeidsportalen. Settes i JWT-headeren så Maskinporten finner riktig nøkkel.
+    public let kid: String?
 
-    public init(clientId: String, privateKeyPEM: String) {
+    public init(clientId: String, privateKeyPEM: String, kid: String?) {
         self.clientId = clientId
         self.privateKeyPEM = privateKeyPEM
+        self.kid = kid
     }
 }
 
 public enum MaskinportenError: LocalizedError {
     case invalidPrivateKey
+    case signingFailed(String)
     case tokenFetchFailed(statusCode: Int, body: String)
 
     public var errorDescription: String? {
         switch self {
         case .invalidPrivateKey:
-            return "Ugyldig privat nøkkel. Sjekk at nøkkelen er i PEM-format (PKCS#8)."
+            return "Ugyldig privat nøkkel. Forventer en RSA-nøkkel i PEM-format (PKCS#8)."
+        case .signingFailed(let detail):
+            return "Klarte ikke å signere token: \(detail)"
         case .tokenFetchFailed(let code, let body):
             return "Maskinporten svarte med feil \(code): \(body)"
         }
     }
 }
 
-/// Henter Maskinporten-tokens via JWT grant-flyten (ES256).
+/// Henter Maskinporten-tokens via JWT grant-flyten (RS256).
 public actor MaskinportenClient {
     private static let tokenURL = URL(string: "https://ver2.maskinporten.no/token")!
     private static let audience = "https://ver2.maskinporten.no/"
@@ -46,10 +52,7 @@ public actor MaskinportenClient {
     }
 
     private func fetchFreshToken(scope: String) async throws -> String {
-        guard let privateKey = try? P256.Signing.PrivateKey(pemRepresentation: credentials.privateKeyPEM) else {
-            throw MaskinportenError.invalidPrivateKey
-        }
-
+        let privateKey = try RSAKey(pem: credentials.privateKeyPEM)
         let assertion = try buildAssertion(privateKey: privateKey, scope: scope)
 
         var req = URLRequest(url: Self.tokenURL)
@@ -73,10 +76,12 @@ public actor MaskinportenClient {
         return decoded.access_token
     }
 
-    private func buildAssertion(privateKey: P256.Signing.PrivateKey, scope: String) throws -> String {
+    private func buildAssertion(privateKey: RSAKey, scope: String) throws -> String {
         let now = Int(Date().timeIntervalSince1970)
-        // kid må matche nøkkelen registrert i Samarbeidsportalen (samme RFC 7638-thumbprint).
-        let header = ["alg": "ES256", "typ": "JWT", "kid": ECKeyJWK.kid(for: privateKey.publicKey)]
+        var header: [String: Any] = ["alg": "RS256", "typ": "JWT"]
+        if let kid = credentials.kid, !kid.isEmpty {
+            header["kid"] = kid
+        }
         let payload: [String: Any] = [
             "iss": credentials.clientId,
             "aud": Self.audience,
@@ -90,8 +95,8 @@ public actor MaskinportenClient {
         let payloadB64 = try JSONSerialization.data(withJSONObject: payload).base64url
         let signingInput = "\(headerB64).\(payloadB64)"
 
-        let sig = try privateKey.signature(for: Data(signingInput.utf8))
-        return "\(signingInput).\(sig.rawRepresentation.base64url)"
+        let sig = try privateKey.signRS256(Data(signingInput.utf8))
+        return "\(signingInput).\(sig.base64url)"
     }
 }
 

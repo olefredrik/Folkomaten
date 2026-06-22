@@ -5,6 +5,7 @@ public enum KeychainCredentials {
     private static let service     = "no.justify.testborger"
     private static let clientIdKey = "maskinporten-client-id"
     private static let privateKey  = "maskinporten-private-key-pem"
+    private static let kidKey      = "maskinporten-kid"
 
     public static var clientId: String? {
         get { load(clientIdKey) }
@@ -16,13 +17,18 @@ public enum KeychainCredentials {
         set { newValue.map { save($0, key: privateKey) } ?? delete(privateKey) }
     }
 
+    public static var kid: String? {
+        get { load(kidKey) }
+        set { newValue.map { save($0, key: kidKey) } ?? delete(kidKey) }
+    }
+
     public static var isConfigured: Bool {
         clientId != nil && privateKeyPEM != nil
     }
 
     public static func credentials() -> MaskinportenCredentials? {
         guard let id = clientId, let pem = privateKeyPEM else { return nil }
-        return MaskinportenCredentials(clientId: id, privateKeyPEM: pem)
+        return MaskinportenCredentials(clientId: id, privateKeyPEM: pem, kid: kid)
     }
 
     // MARK: - Privat

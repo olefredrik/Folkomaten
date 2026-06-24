@@ -13,7 +13,7 @@ En macOS menylinje-app som enkelt lar deg kopiere fødselsnummeret til en BankID
 
 - 50 syntetiske eksempelbrukere er innebygd, så appen virker med en gang.
 - **Kopier fødselsnummer** med ett klikk
-- **Global hurtigtast**: åpne appen med `⌃⌥⌘F` uansett hvilken app du er i – også når menylinje-ikonet er skjult bak notch-en på en full menylinje. Snarveien kan endres i innstillingene.
+- **Global hurtigtast**: åpne appen med `⌃⌥F` uansett hvilken app du er i – også når menylinje-ikonet er skjult bak notch-en på en full menylinje. Snarveien kan endres i innstillingene.
 - **Favoritter**: marker brukerne du bruker ofte, og filtrer på dem.
 - **Fødselsdato** utledes fra fødselsnummeret (syntetiske Tenor-numre).
 - **Søk** på navn eller fødselsnummer.
@@ -33,7 +33,7 @@ cd Folkomaten
 open Folkomaten.app
 ```
 
-Appen lever i menylinjen (ingen Dock-ikon). Trykk `⌃⌥⌘F` eller klikk menylinje-ikonet for å åpne den.
+Appen lever i menylinjen (ingen Dock-ikon). Trykk `⌃⌥F` eller klikk menylinje-ikonet for å åpne den.
 
 ## Innlogging i BankID preprod
 

@@ -242,6 +242,15 @@ struct MenuContentView: View {
             Spacer()
 
             Button {
+                closePanel()
+                SettingsWindowController.shared.show()
+            } label: {
+                Image(systemName: "gearshape")
+            }
+            .buttonStyle(.borderless)
+            .help("Innstillinger – Maskinporten og hurtigtast")
+
+            Button {
                 NSApp.terminate(nil)
             } label: {
                 Label("Avslutt", systemImage: "rectangle.portrait.and.arrow.right")

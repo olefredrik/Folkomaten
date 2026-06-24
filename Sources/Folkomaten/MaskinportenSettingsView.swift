@@ -20,7 +20,8 @@ struct MaskinportenSettingsView: View {
                     Spacer()
                     ShortcutRecorderView()
                 }
-                Text("Virker overalt – også når menylinje-ikonet er skjult bak notch-en.")
+                Text("Virker overalt – også når menylinje-ikonet er skjult bak notch-en. "
+                     + "Endres med en gang du trykker ny kombinasjon (uavhengig av Lagre).")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

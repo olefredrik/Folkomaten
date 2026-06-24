@@ -2,17 +2,19 @@ import AppKit
 import Carbon.HIToolbox
 
 /// En tastatursnarvei: en virtuell tastkode pluss modifikatorer, med en
-/// menneskelesbar visning (f.eks. «⌃⌥⌘F»).
+/// menneskelesbar visning (f.eks. «⌃⌥F»).
 struct Shortcut: Equatable {
     var keyCode: UInt32
     var modifiers: NSEvent.ModifierFlags
     var display: String
 
-    /// Standard: ⌃⌥⌘F (F = virtuell tastkode 3).
+    /// Standard: ⌃⌥F (F = virtuell tastkode 3).
+    /// ⌃⌥ er bevisst valgt fordi apper (som VS Code) sjelden binder den, så
+    /// den globale snarveien ikke kaprer kjente kombinasjoner.
     static let `default` = Shortcut(
         keyCode: 3,
-        modifiers: [.command, .option, .control],
-        display: "⌃⌥⌘F"
+        modifiers: [.control, .option],
+        display: "⌃⌥F"
     )
 
     /// Modifikatorene omgjort til Carbon-maska `RegisterEventHotKey` forventer.

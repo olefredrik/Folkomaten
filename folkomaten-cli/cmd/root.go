@@ -1,6 +1,5 @@
 /*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2026 ANTONIO RODRIGUEZ <kontakt@antoniorodriguez.no>
 */
 package cmd
 
@@ -10,18 +9,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "my-cli",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "folkomaten",
+	Short: "CLI tool for Folkomaten",
+	Long: `Folkomaten is a CLI tool for finding and copying national identity numbers
+(fødselsnummer) for BankID test users that also exist in the Norwegian
+National Population Register (DSF) test database.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -47,5 +41,3 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-

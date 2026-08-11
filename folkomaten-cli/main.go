@@ -1,10 +1,9 @@
 /*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2026 ANTONIO RODRIGUEZ <kontakt@antoniorodriguez.no>
 */
 package main
 
-import "my-cli/cmd"
+import "folkomaten-cli/cmd"
 
 func main() {
 	cmd.Execute()

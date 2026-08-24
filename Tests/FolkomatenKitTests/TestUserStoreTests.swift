@@ -50,3 +50,23 @@ private func freshDefaults(_ name: String) -> UserDefaults {
     let reopened = TestUserStore(defaults: defaults)
     #expect(!reopened.users.isEmpty)
 }
+
+// Fixture-fila er UTF-16LE med BOM og CRLF, slik BankID preprod leverer filene sine.
+// Dekker disk-lesing med ekte bytes; `fileDataRoundTrips` dekker bare bytes i minnet.
+@MainActor
+@Test func parseFileReadsUTF16WithBOMFromDisk() throws {
+    let url = try #require(
+        Bundle.module.url(forResource: "testbrukere-preprod-utf16", withExtension: "txt")
+    )
+
+    let data = try Data(contentsOf: url)
+    #expect(data.prefix(2) == Data([0xFF, 0xFE]))
+
+    let users = try TestUserStore.parseFile(at: url)
+    #expect(users.count == 10)
+    #expect(users.first?.fnr == "05818697610")
+
+    // Æ, Ø og Å overlever tegnsett-deteksjonen.
+    #expect(users.contains { $0.lastName == "Ostehøvel" })
+    #expect(users.contains { $0.firstName == "Øvrige" })
+}

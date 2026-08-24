@@ -1,0 +1,3 @@
+# Fixture-fila skal være byte-eksakt (UTF-16LE med BOM og CRLF), så git
+# må ikke normalisere linjeskift i den.
+Tests/FolkomatenKitTests/Fixtures/*.txt -text

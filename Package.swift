@@ -20,7 +20,8 @@ let package = Package(
         .testTarget(
             name: "FolkomatenKitTests",
             dependencies: ["FolkomatenKit"],
-            path: "Tests/FolkomatenKitTests"
+            path: "Tests/FolkomatenKitTests",
+            resources: [.process("Fixtures")]
         ),
     ]
 )

@@ -24,7 +24,20 @@ En macOS menylinje-app som enkelt lar deg kopiere fødselsnummeret til en BankID
 
 ## Installasjon
 
-Krever Swift 5.9+ (Command Line Tools holder).
+Krever full **Xcode** (Swift 5.9+). Command Line Tools alene holder ikke: fra
+macOS 27 SDK-et er SwiftUIs `@State` en makro, og makro-pluginen følger bare med
+Xcode. Bygger du uten Xcode, feiler det med
+`external macro implementation type 'SwiftUIMacros.StateMacro' could not be found`.
+
+Installer Xcode og pek kommandolinjeverktøyene mot den:
+
+```sh
+open "macappstore://apps.apple.com/app/id497799835"            # Xcode i App Store
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+sudo xcodebuild -license accept
+```
+
+Bygg og start appen:
 
 ```sh
 git clone https://github.com/olefredrik/Folkomaten.git

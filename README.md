@@ -63,6 +63,18 @@ for tilgang til preprod-appen.
 Vil du hente **dine egne** testbrukere fra Tenor, lese om filformatet, se hvordan
 fødselsdato utledes, eller bygge videre på koden? Se **[docs/AVANSERT.md](docs/AVANSERT.md)**.
 
+## Søsterprosjekter
+
+Folkomaten er bare for macOS. Bruker du en annen plattform, finnes det beslektede
+verktøy laget av andre:
+
+- **[folkctl](https://github.com/antoniorodr/folkctl)**: en kommandolinjeversjon
+  skrevet i Go, som også skal fungere på Windows. Laget av Antonio Rodriguez
+  ([@antoniorodr](https://github.com/antoniorodr)).
+- **[Folkomaten for Windows](https://github.com/janode/folkomaten-windows)**: en
+  Windows-app med grafisk brukergrensesnitt. Laget av Jan Odegard
+  ([@janode](https://github.com/janode)).
+
 ## Lisens
 
 [MIT](LICENSE).
